@@ -7,6 +7,7 @@ import org.apache.spark.sql.SparkSession
 
 object ForTest {
   def main(args: Array[String]): Unit = {
+    
     /* val str = List("1|a1#a9,2|b1#b9,3|c1#c9,4|d1#d8", "1|a2#a8,2|b2#b8,3|c2#c8,4|d2d8")
     println(str)
     var list1=("","")::Nil
