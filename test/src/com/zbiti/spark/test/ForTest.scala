@@ -4,7 +4,11 @@ import scala.tools.nsc.doc.model.Def
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
+import java.net.URL
+import java.util.List
+import com.zb.ac.AC2Util2
 
+import collection.JavaConverters._
 object ForTest {
   def main(args: Array[String]): Unit = {
     
@@ -45,11 +49,11 @@ object ForTest {
       println(x)
     }*/
 
-    test3();
+    test4();
 
   }
 
-  def test(): Unit = {
+ /* def test(): Unit = {
     var list = List((("a1", "a2", "a3"), ("b1", "b2", "b3"), ("c1", "c2", "c3")), (("a11", "a22", "a33"), ("b11", "b22", "b33"), ("c11", "c22", "c33")), (("a1", "a2", "a3"), ("b1", "b2", "b3"), ("c1", "c2", "c3")), (("a11", "a22", "a33"), ("b11", "b22", "b33"), ("c11", "c22", "c33")))
     println(list.toArray)
     var arr1 = list.toArray
@@ -87,5 +91,15 @@ object ForTest {
   def test3(): Unit = {
     val s = Array("cai","yong") 
     println(s)
+  }*/
+  
+  def test4(): Unit = {
+    val resource1 = ForTest.getClass.getClassLoader.getResource("com/zbiti/spark/wp/").toString()
+    println(resource1)
+    var x:Seq[String] = Seq("001,baidu.com,001", "002,sina.com,002")
+    var list: java.util.List[String] = x.asJava
+     AC2Util2.list1 = list
+     new AC2Util2()
+     
   }
 }

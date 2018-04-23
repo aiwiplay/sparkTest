@@ -6,32 +6,55 @@ import org.apache.spark.sql.{DataFrame, SQLContext}
 import com.zb.ac.AC2Util
 import java.util.ArrayList
 import com.zb.ac.AC2Util2
-
-object CountByUrl2 {
+import scala.collection.Seq
+import collection.JavaConverters._
+object CountByUrl4 {
 //  new AC2Util("G:/tmp/jptest/tag_conf.txt", ",")
-  new AC2Util2()
+  
   def main(args: Array[String]): Unit = {
     
     val conf=new SparkConf().setAppName("CountUsersByUrl").setMaster("local")  
     val sc=new SparkContext(conf)  
     val sqc=new SQLContext(sc)
     case class user_tag_class(mdn:String,url:String,tag:String)//注册一个类
-    
-    val data=sc.textFile("G:/tmp/jptest/data2.txt") 
+    val tag_conf_data = sc.textFile(args(2))
+//    tag_conf_data.foreach(println)
+    var list1 = ("")::Nil 
+    var arr = tag_conf_data.collect()
+    for(i <- 0 to arr.length-1){
+      println("==arr:"+arr(i))
+      list1=(arr(i))::list1
+      println("list1===>"+list1)
+    }
+    println("====>"+list1)
+    var seq_data:Seq[String] = list1
+    TagConfInit.initAcUtil(seq_data)
+//    var y :Set[String] = Set("001,baidu.com,001", "002,sina.com,002")
+//    new AC2Util2()
+    val data=sc.textFile(args(0)) 
     var a = data.flatMap{line=>
-      val x = line.split("\\|")
+      val x = line.split("\t")
       if (x.length == 1) None
       else {
 //        println("x===>" + x.length + "---" + x(0))
-        var mdn = ""
-        if (x.length > 0) {
+        /*var mdn = ""
+        if (x.length > 1) {
           //         mdn ==  x(1)
-          mdn = x(0)
+          mdn = x(1)
         }
         var url = ""
-        if (x.length > 1) {
+        if (x.length > 29) {
           //         url ==  x(29)
-          url = x(1)
+          url = x(29)
+        }*/
+        
+        var mdn = ""
+        if (x.length > 3) {
+          mdn = x(3)
+        }
+        var url = ""
+        if (x.length > 23) {
+          url = x(23)
         }
 
         val tags = AC2Util2.getTag(url).replace(",", "|")
@@ -69,6 +92,7 @@ val df=sqc.createDataFrame(b)  // 生成一个dataframe
     val rs_arr=rs.collect() //rs转为rdd
     val rs_rdd = sc.parallelize(rs_arr).map(z=>( z(0),z(1),z(2)))
     rs_rdd.foreach(y=>println(y))
+    rs_rdd.saveAsTextFile(args(1)) 
 //    var b = sc.parallelize(a.collect())
 //   b.flatm
     sc.stop();  
